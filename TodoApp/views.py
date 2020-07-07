@@ -3,13 +3,20 @@ from .forms import ToDoAppForm
 from .models import ToDoApp
 from django.views.generic import ListView, CreateView, DeleteView
 
-class ToDoListView(ListView):
-    model = ToDoApp
-    queryset = ToDoApp.objects.all()
-    template_name = 'TodoApp/todo.html'
-    
-class ToDoCreateView(CreateView):
-    pass 
+#class ToDoView(ListView):
+    #model = ToDoApp
+    #queryset = ToDoApp.objects.all()
+    #template_name = 'TodoApp/todo.html'
 
-class ToDoDeleteView(DeleteView):
-    pass
+def todoview(request):
+    if request.method == 'POST':
+        form = ToDoAppForm(request.POST)
+        if form.is_valid():
+            form.save()
+            form = ToDoAppForm()
+    else:
+        form = ToDoAppForm()
+
+    qs = ToDoApp.objects.all()
+    context = {'form': form, 'object_list': qs}
+    return render(request, 'TodoApp/todo.html', context)

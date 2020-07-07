@@ -1,7 +1,44 @@
+{% extends 'Todoapp/base.html' %}
+{% load crispy_forms_tags %}
+{% load bootstrap4 %}
+
+{% block page_header %}
+  <h2>ToDoApp</h2>
+{% endblock page_header %}
+{% block content %}
+
+<form method="post" class="form">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <button name="submit" class="btn btn-primary btn-lg">Add</button>
+</form>
+
+
+<div class="pb-2 mb-2 border-bottom">
+  <h2>ToDoList</h2>
+</div>
+
 {% for obj in object_list%}
-    <h2>{{ obj.category }}</h2>
-    <p>{{ obj.description}}</p>
-    <br>
-    <p>{{ obj.date }}
-    <br> 
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">{{ obj.category }}</h5>
+    <p class="card-text">{{ obj.description}}.</p>
+    <p class="card-text">{{ obj.date }}.</p>
+    <a href="#" class="btn btn-primary">Delete</a>
+  </div>
+</div>
 {% endfor %}
+
+
+    
+    
+
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+  $(function() {
+    $( ".date_picker" ).datepicker();
+  });
+</script>
+{% endblock %}
