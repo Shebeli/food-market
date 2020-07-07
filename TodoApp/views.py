@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .forms import ToDoAppForm
 from .models import ToDoApp
 from django.views.generic import ListView, CreateView, DeleteView
@@ -20,3 +20,9 @@ def todoview(request):
     qs = ToDoApp.objects.all()
     context = {'form': form, 'object_list': qs}
     return render(request, 'TodoApp/todo.html', context)
+
+def tododelete(request, id):
+    obj = ToDoApp.objects.get(id=id)
+    obj.delete()
+
+    return redirect('todo-list')

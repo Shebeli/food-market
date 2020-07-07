@@ -24,7 +24,7 @@
     <h5 class="card-title">{{ obj.category }}</h5>
     <p class="card-text">{{ obj.description}}.</p>
     <p class="card-text">{{ obj.date }}.</p>
-    <a href="#" class="btn btn-primary">Delete</a>
+    <a href="{{ obj.delete_url }}" class="btn btn-primary">Delete</a>
   </div>
 </div>
 {% endfor %}
