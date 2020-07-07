@@ -4,30 +4,46 @@
 
 {% block page_header %}
   <h2>ToDoApp</h2>
+  <div class="border-bottom border-dark">
+  </div>
 {% endblock page_header %}
-{% block content %}
 
+{% block page_form %}
 <form method="post" class="form">
     {% csrf_token %}
     {% bootstrap_form form %}
     <button name="submit" class="btn btn-primary btn-lg">Add</button>
+    <input type="hidden" value=
 </form>
+{% endblock %}
+
+{% block content %}
 
 
-<div class="pb-2 mb-2 border-bottom">
-  <h2>ToDoList</h2>
-</div>
 
-{% for obj in object_list%}
-<div class="card">
-  <div class="card-body">
-    <h5 class="card-title">{{ obj.category }}</h5>
-    <p class="card-text">{{ obj.description}}.</p>
-    <p class="card-text">{{ obj.date }}.</p>
-    <a href="{{ obj.delete_url }}" class="btn btn-primary">Delete</a>
+<main role="main" class="container bg-white">
+<h2>ToDoList</h2>
+  <div class="border-bottom mb-2 border-dark">
   </div>
-</div>
+{% if object_list is None %}
+  <p>Nothing has been added yett</p>
+  <p>add something!</p>
+{% endif %}  
+<div class="row"> 
+{% for obj in object_list %}
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body mb-2 bg-dark text-white">
+        <h5 class="card-title ">{{ obj.category }}</h5>
+        <p class="card-text">{{ obj.description}}.</p>
+        <p class="card-text">{{ obj.date }}.</p>
+        <a href="{{ obj.delete_url }}" class="btn btn-danger">Delete</a>
+      </div>
+    </div>
+  </div>
 {% endfor %}
+</div>
+</main>
 
 
     
