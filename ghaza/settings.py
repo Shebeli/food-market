@@ -31,8 +31,11 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # 3rd party packages
     'bootstrap4',
     'crispy_forms',
+    # own apps
+    'food',
     'TodoApp',
     'django.contrib.admin',
     'django.contrib.auth',
