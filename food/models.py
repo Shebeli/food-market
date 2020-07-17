@@ -1,4 +1,14 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+class SiteUser(AbstractUser):
+    first_name = models.CharField(max_length=30,blank=True,verbose_name='نام')
+    last_name = models.CharField(max_length=30,blank=True,verbose_name='نام خانوادگی')
+    phone_number = models.IntegerField(verbose_name='شماره تلفن',unique=True,
+    error_messages={'unique':'این شماره قبلا ثبت شده است'},
+    blank=False,null=True
+    )
+    email = models.EmailField(verbose_name='ایمیل',blank=False)
 
 class TheFood(models.Model):
     name = models.CharField(max_length=20)
