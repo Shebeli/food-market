@@ -6,7 +6,7 @@ class SiteUser(AbstractUser):
     last_name = models.CharField(max_length=30,blank=True,verbose_name='نام خانوادگی')
     phone_number = models.IntegerField(verbose_name='شماره تلفن',unique=True,
     error_messages={'unique':'این شماره قبلا ثبت شده است'},
-    blank=False,null=True
+    blank=False,null=True,help_text='شماره در 10 رقم به صورت  ******9'
     )
     email = models.EmailField(verbose_name='ایمیل',blank=False)
 
@@ -18,4 +18,5 @@ class TheFood(models.Model):
 
     def __str__(self):
         return f"{self.name} --> {self.price}"
+
 
