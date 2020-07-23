@@ -13,6 +13,7 @@ class SiteUser(AbstractUser):
     )
     email = models.EmailField(verbose_name='ایمیل',blank=False)
 
+
 class TheFood(models.Model):
     name = models.CharField(max_length=20)
     category = models.CharField(max_length=20)
@@ -22,8 +23,59 @@ class TheFood(models.Model):
     def __str__(self):
         return f"{self.name} --> {self.price}"
 
+class FoodTransaction(models.Model):
+    owner = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    total_price = models.IntegerField(default=0,verbose_name='مجموع هزینه')
+    date_modified = models.DateTimeField(auto_now=True,verbose_name='تاریخ صورت حساب')
+    completed = models.BooleanField(default=False,verbose_name='انجام شده')
+    foods = models.ManyToManyField(TheFood,blank=True)
+
+    def __str__(self):
+        return f"Owner:{self.owner} | Total price: {self.total_price}$ | Completed: {self.completed} |  DateCreated: {self.date_modified}"
+
+    def get_trans(self):
+        """Retrieves the latest food transaction which has attribute completed = False on it.
+        If theres no transaction availabe, then create one associated with logged in user."""
+        transactions = FoodTransaction.objects.all()
+        for trans in transactions:
+            if trans.completed == False:
+                return trans 
+            else:
+                trans = FoodTransaction.objects.create(owner=self.request.user)
+                return trans
+
+    def add_food(self, food):# food is the selected thefood object. eg: food = TheFood.objects.get(pk=pk)
+        """Adds the given object food to the transaction and increase foodtrans total_price based on food's price."""
+        trans = self.get_trans()
+        trans.foods.add(food)
+        trans.total_price += food.price
+        trans.save()
+
+    def remove_food(self, food):
+        """Removes the given object food from the transaction and decrease foodtrans total_price based on food's price."""
+        trans = self.get_trans()
+        trans.foods.remove(food)
+        trans.total_price -= food.price
+        trans.save()
+
+    def complete_trans_with_wallet(self):
+        """Complete the transaction with wallet currency; If the wallet doesn't have enough currency,
+        redirect user"""
+        wallet = SiteWallet.objects.get(owner=self.request.user)
+        trans = self.get_trans()
+        trans.total_price = cost
+        if wallet.balance >= cost:
+            wallet.withdraw(cost)
+            trans.completed = True
+        else:
+            return None
+
+    def complete_trans_with_payment(self):
+        pass
+
+
 class SiteWallet(models.Model):
-    owner = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    owner = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     balance = models.IntegerField(verbose_name='مقدار حساب',default=0)
 
     def get_absolute_url(self):
