@@ -12,3 +12,22 @@ class SiteUserCreationForm(UserCreationForm):
         widgets = {
             'phone_number': forms.TextInput()
         }
+
+class DepositForm(forms.Form):
+    deposit = forms.IntegerField(min_value=50000,max_value=10000000,
+                                error_messages={'required':'لطفا عدد را وارد کنید'
+                                                ,'invalid':"مقدار داده شده صحیح نم باشد"
+                                                ,'min_value':'حداقل مقدار ورودی باید ۵۰۰۰۰ باشد'
+                                                ,'max_value':'حداکثر مقدار ورودی باید ۱۰۰۰۰۰۰ باشد'})
+
+
+class WithdrawForm(forms.Form):
+    withdraw = forms.IntegerField(min_value=50000,max_value=10000000,
+                                error_messages={'required':'لطفا عدد را وارد کنید'
+                                                ,'invalid':"مقدار داده شده صحیح نم باشد"
+                                                ,'min_value':'حداقل مقدار ورودی باید ۵۰۰۰۰ باشد'
+                                                ,'max_value':'حداکثر مقدار ورودی باید ۱۰۰۰۰۰۰ باشد'})
+
+
+
+
