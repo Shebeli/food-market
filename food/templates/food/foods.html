@@ -1,5 +1,14 @@
 {% if user.is_authenticated %}
     <h1> Wallet Balance {{ user.sitewallet.balance }} </h1>
+    <h2> Food list --> </br>
+     {% for food in food_count %}
+        {{forloop.counter}}) food:{{ food.food.name }} price:{{ food.food.price }} count: {{ food.count }}
+        <a href="{{ food.food.item_inc_url }}">+</a>
+        <a href="{{ food.food.item_dec_url }}">-</a>
+        <a href="{{ food.food.item_remove_url}}">Remove Item</a>
+        </br>
+    {% endfor %}    
+    total price:{{ transaction.total_price }}</h2>
 {% else %}
 <h1>NO wallet</h1>
 {% endif %}
@@ -9,5 +18,7 @@
 <h3>{{ food.name }}<h3>
 <h4>{{ food.category }}<h4>
 <p>{{food.price}} $<p>
+<a href="{{ food.item_add_url }}">Add</a>
+
 </br>
 {% endfor %}

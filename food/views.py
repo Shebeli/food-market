@@ -1,18 +1,59 @@
 from django.shortcuts import render, redirect, reverse
 from django.http import Http404
 from django.views.generic import ListView, FormView, DetailView, UpdateView
-from django.views.generic.base import TemplateResponseMixin
+from django.views.generic.base import TemplateResponseMixin, TemplateView
 from django.views.generic.detail import SingleObjectMixin, SingleObjectTemplateResponseMixin
 from django.views import View
 from django.contrib import messages
 from django.core.validators import validate_integer
-from .models import TheFood, SiteWallet
+from .models import TheFood, SiteWallet, FoodTransaction, FoodCount
 from .forms import SiteUserCreationForm, DepositForm, WithdrawForm
 
-class TheFoodListView(ListView):
-    model = TheFood
-    paginate_by = 20
-    context_object_name = "food_list"
+class TheFoodListView(TemplateView):
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['food_list'] = TheFood.objects.all()
+        trans = FoodTransaction.objects.get(owner=self.request.user,completed=False)
+        context['food_count'] = FoodCount.objects.filter(transaction=trans)
+        context['transaction'] = trans
+        return context
+
+def get_trans(user):# user is the same as self.request.user in views
+        """Retrieves the latest food transaction which has attribute completed = False on it.
+        If theres no transaction availabe, then create one associated with logged in user."""
+        transactions = FoodTransaction.objects.filter(owner=user)
+        for trans in transactions:
+            if trans.completed == False:
+                return trans 
+            else:
+                trans = FoodTransaction.objects.create(owner=user)
+                return trans
+
+def additemview(request, id):
+    transaction = get_trans(request.user)
+    food = TheFood.objects.get(pk=id)
+    transaction.add_food(food, transaction)
+    return redirect('food-list')
+
+def removeitemview(request, id):
+    transaction = get_trans(request.user)
+    food = TheFood.objects.get(pk=id)
+    transaction.remove_food(food, transaction)
+    return redirect('food-list')
+
+def countincview(request, id):
+    transaction = get_trans(request.user)
+    food = TheFood.objects.get(pk=id)
+    transaction.increment_food(food, transaction)
+    return redirect('food-list')
+
+def countdecview(request, id):
+    transaction = get_trans(request.user)
+    food = TheFood.objects.get(pk=id)
+    transaction.decrement_food(food, transaction)
+    return redirect('food-list')
+
 
 class UserRegisterFormView(FormView):
     form_class = SiteUserCreationForm
@@ -86,6 +127,8 @@ class WalletWithdrawView(FormView):
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
+
+    
         
             
 
