@@ -23,79 +23,85 @@ class TheFood(models.Model):
     def __str__(self):
         return f"{self.name}: {self.price}$"
 
-    def item_add_url(self):
-        return reverse("add-item", kwargs={"id": self.pk})
+    #def item_add_url(self):
+        #return reverse("add-item", kwargs={"id": self.pk})
 
-    def item_remove_url(self):
-        return reverse("remove-item", kwargs={"id": self.pk})
+    #def item_remove_url(self):
+        #return reverse("remove-item", kwargs={"id": self.pk})
 
-    def item_inc_url(self):
-        return reverse("increase-item", kwargs={"id": self.pk})
+    #def item_inc_url(self):
+        #return reverse("increase-item", kwargs={"id": self.pk})
 
-    def item_dec_url(self):
-        return reverse("decrease-item", kwargs={"id": self.pk})    
+    #def item_dec_url(self):
+        #return reverse("decrease-item", kwargs={"id": self.pk})    
 
 class FoodTransaction(models.Model):
-    owner = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     total_price = models.IntegerField(default=0,verbose_name='مجموع هزینه')
     date_modified = models.DateTimeField(auto_now=True,verbose_name='تاریخ صورت حساب')
     completed = models.BooleanField(default=False,verbose_name='انجام شده')
     foods = models.ManyToManyField(TheFood,through='FoodCount',blank=True)
 
+
     def __str__(self):
-        return f"Owner:{self.owner} | Total price: {self.total_price}$ | Completed: {self.completed} |  DateCreated: {self.date_modified}"
+        return f"Owner: {self.owner} | Total price: {self.total_price}$ | Completed: {self.completed} | DateModified: {self.date_modified}| ID: {self.pk} |"
 
-    def get_user(self, user):# :D this method should be given self.request.user 
-        return user
+    #def get_user(self, user):# :D this method should be given self.request.user 
+        #return user
 
-        #    
-    def add_food(self, food, trans):# food is the selected thefood object. eg: food = TheFood.objects.get(pk=pk)
+    def add_food(self, food):# food is the selected thefood object. eg: food = TheFood.objects.get(pk=pk)
         """Adds the given object food to the transaction querylist and increase foodtrans total_price based on food's price."""
-        trans.foods.add(food)
-        count_obj = trans.foodcount_set.get(food=food, transaction=trans)
+        self.foods.add(food)
+        count_obj = self.foodcount_set.get(food=food, transaction=self)
         count_obj.count += 1
-        trans.total_price += food.price
-        trans.save()
+        self.total_price += food.price
+        self.save()
         count_obj.save()
 
-    def increment_food(self, food, trans):# food is the selected thefood object. eg: food = TheFood.objects.get(pk=pk)
+    def increment_food(self, food):# food is the selected thefood object. eg: food = TheFood.objects.get(pk=pk)
         """Increments food count by 1 for the count object"""
-        count_obj = trans.foodcount_set.get(food=food, transaction=trans)
+        count_obj = self.foodcount_set.get(food=food, transaction=self)
         count_obj.count += 1
-        trans.total_price += food.price
-        trans.save()
+        self.total_price += food.price
+        self.save()
         count_obj.save()
 
 
-    def remove_food(self, food, trans):
+    def remove_food(self, food):
         """Removes the given object food from the transaction and decrease foodtrans total_price based on food's price."""
-        trans.foods.remove(food)#FoodCount associated object will also be deleted
-        trans.total_price -= food.price
-        trans.save()
+        count_obj = self.foodcount_set.get(food=food, transaction=self)
+        self.total_price -= count_obj.count * food.price 
+        self.foods.remove(food)#FoodCount associated object will also be deleted
+        self.save()
 
-    def decrement_food(self, food, trans):# food is the selected thefood object. eg: food = TheFood.objects.get(pk=pk)
-        """Increments food count by 1 for the."""
-        count_obj = trans.foodcount_set.get(food=food, transaction=trans)
-        count_obj.count -= 1
-        trans.total_price -= food.price
-        trans.save()
-        count_obj.save()
+    def decrement_food(self, food):# food is the selected thefood object. eg: food = TheFood.objects.get(pk=pk)
+        """Decrements food count by 1 for the given foodtransaction object. if the count is less than one, remove it instead."""
+        count_obj = self.foodcount_set.get(food=food, transaction=self)
+        if count_obj.count <= 1:
+            self.remove_food(food)
+        else:
+            count_obj.count -= 1
+            self.total_price -= food.price
+            self.save()
+            count_obj.save()
 
 
-    def complete_trans_with_wallet(self, user, trans):
+    def complete_trans_with_wallet(self, user):
         """Complete the transaction with wallet currency; If the wallet doesn't have enough currency,
-        redirect user"""
+        return false"""#also, maybe the information about the foodtransaction must be parsed into json or sth for API usage...
         wallet = SiteWallet.objects.get(owner=user)    
-        cost = trans.total_price
+        cost = self.total_price
         if wallet.balance >= cost:
             wallet.withdraw(cost)
-            trans.completed = True
-            trans.save()
+            self.completed = True
+            self.save()
+            return True
         else:
-            return ValueError("Not enough MONEEEEEEEEEEEY")
+            return False
 
     def complete_trans_with_payment(self):
         pass
+
 
 class FoodCount(models.Model):
     food = models.ForeignKey(TheFood, on_delete=models.PROTECT)

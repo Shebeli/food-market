@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import (TheFoodListView, UserRegisterFormView, WalletDetailView,  
+from .views import (TheFoodListView, UserRegisterFormView, WalletDetailView, FoodListRedirectView,
                     WalletDepositView, WalletWithdrawView, additemview, removeitemview, countincview, countdecview )
 
 
@@ -13,4 +13,5 @@ urlpatterns = [
     path('remove_food/<int:id>/', removeitemview, name='remove-item'),
     path('inc_food/<int:id>/', countincview, name='increase-item'),
     path('dec_food/<int:id>/', countdecview, name='decrease-item'),
+    path('wallet/transaction/', FoodListRedirectView.as_view(), name='foodwallet-transaction')
 ]
