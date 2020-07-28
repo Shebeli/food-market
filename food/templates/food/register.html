@@ -4,7 +4,7 @@
 
 {% block content %}
 
-
+{{ user }}
 <form method='POST'>
     {% csrf_token %}
     {{ form.username|as_crispy_field}}
@@ -20,7 +20,7 @@
     {{ form.email|as_crispy_field }}
     {{ form.password1|as_crispy_field }}
     {{ form.password2|as_crispy_field }}
-    <button type="button" class="btn btn-success">Register</button>
+    <input type='submit' value='register'/>
 </form>
     
 {% endblock%}

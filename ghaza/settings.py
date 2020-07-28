@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     # 3rd party packages
     'bootstrap4',
     'crispy_forms',
+    'social_django',
     # own apps
     'food',
     'TodoApp',
@@ -68,6 +69,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -75,7 +78,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ghaza.wsgi.application'
 
-
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.open_id.OpenIdAuth',
+    'social_core.backends.google.GoogleOpenId',
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.google.GoogleOAuth',
+    'django.contrib.auth.backends.ModelBackend',
+)
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -128,3 +137,14 @@ STATIC_URL = '/static/'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 AUTH_USER_MODEL = 'food.SiteUser'
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
+SOCIAL_AUTH_USER_MODE = 'food.SiteUser'
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '301274212531-rnj19gbqpmiuqa22fuhcugmdipkmag70.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'K1Uy6aCk2ji0k80bvTec0ofI'
+
+SOCIAL_AUTH_LOGIN_URL ='/ghaza/'
+
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/ghaza/'

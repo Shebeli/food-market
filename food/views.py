@@ -28,11 +28,13 @@ class TheFoodListView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['food_list'] = TheFood.objects.all()
-        trans = get_trans(self.request.user)
-        context['food_count'] = FoodCount.objects.filter(transaction=trans)
-        context['transaction'] = trans
-        return context
+        if self.request.user.is_authenticated:
+            context['food_list'] = TheFood.objects.all()
+            trans = get_trans(self.request.user)
+            context['food_count'] = FoodCount.objects.filter(transaction=trans)
+            context['transaction'] = trans
+            return context
+        return context        
 
 class FoodListRedirectView(RedirectView):
 

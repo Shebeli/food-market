@@ -2,9 +2,13 @@ from django.urls import path
 from .views import (TheFoodListView, UserRegisterFormView, WalletDetailView, FoodListRedirectView,
                     WalletDepositView, WalletWithdrawView, additemview, removeitemview, countincview, countdecview )
 
+from django.contrib.auth.views import LoginView, LogoutView
+
 
 urlpatterns = [
-    path('', TheFoodListView.as_view(template_name="food/foods.html"), name="food-list"),
+    path('', TheFoodListView.as_view(template_name="food/foods.html"), name="main-page"),
+    path('login/', LoginView.as_view(template_name="food/login.html"), name='login'),
+    path('logout/', LogoutView.as_view(template_name="food/logout.html"), name='logout'),
     path('register/', UserRegisterFormView.as_view(template_name="food/register.html"), name='register'),
     path('wallet/', WalletDetailView.as_view(template_name="food/wallet.html"), name="wallet"),
     path('wallet/deposit/',WalletDepositView.as_view(template_name="food/wallet_deposit.html"), name="wallet-deposit"),
