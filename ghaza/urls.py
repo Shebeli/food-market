@@ -20,5 +20,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('Todoapp/',include('TodoApp.urls')),
     path('ghaza/',include('food.urls')),
+    path('payment/', include('zarinpal.urls')),
     path('', include('social_django.urls', namespace='social')),
 ]

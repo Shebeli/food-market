@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     # own apps
     'food',
     'TodoApp',
+    'zarinpal',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -149,3 +150,9 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'K1Uy6aCk2ji0k80bvTec0ofI'
 SOCIAL_AUTH_LOGIN_URL ='/ghaza/'
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/ghaza/'
+
+ZARINPAL_SANDBOX = True 
+
+ZARINPAL_REDIRECT_URL = 'http://localhost:8000/verify/'
+
+#MERCHANT_ID

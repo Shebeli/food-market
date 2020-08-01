@@ -5,9 +5,9 @@ from .widgets import BootstrapDateTimePickerInput
 
 
 class ToDoAppForm(forms.ModelForm):
-    date = forms.DateTimeField(
-        input_formats=['%d/%m/%Y %H:%M'],
-        widget=BootstrapDateTimePickerInput()
+    date = forms.TimeField(
+        input_formats=['%H:%M'],
+        help_text='eg. 15:30'
     )
     class Meta:
         model = ToDoApp
