@@ -22,19 +22,8 @@ class TheFood(models.Model):
 
     def __str__(self):
         return f"{self.name}: {self.price}$"
-
-    #def item_add_url(self):
-        #return reverse("add-item", kwargs={"id": self.pk})
-
-    #def item_remove_url(self):
-        #return reverse("remove-item", kwargs={"id": self.pk})
-
-    #def item_inc_url(self):
-        #return reverse("increase-item", kwargs={"id": self.pk})
-
-    #def item_dec_url(self):
-        #return reverse("decrease-item", kwargs={"id": self.pk})    
-
+ 
+ 
 class FoodTransaction(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     total_price = models.IntegerField(default=0,verbose_name='مجموع هزینه')
@@ -42,12 +31,8 @@ class FoodTransaction(models.Model):
     completed = models.BooleanField(default=False,verbose_name='انجام شده')
     foods = models.ManyToManyField(TheFood,through='FoodCount',blank=True)
 
-
     def __str__(self):
         return f"Owner: {self.owner} | Total price: {self.total_price}$ | Completed: {self.completed} | DateModified: {self.date_modified}| ID: {self.pk} |"
-
-    #def get_user(self, user):# :D this method should be given self.request.user 
-        #return user
 
     def add_food(self, food):# food is the selected thefood object. eg: food = TheFood.objects.get(pk=pk)
         """Adds the given object food to the transaction querylist and increase foodtrans total_price based on food's price."""
@@ -65,7 +50,6 @@ class FoodTransaction(models.Model):
         self.total_price += food.price
         self.save()
         count_obj.save()
-
 
     def remove_food(self, food):
         """Removes the given object food from the transaction and decrease foodtrans total_price based on food's price."""
@@ -85,7 +69,6 @@ class FoodTransaction(models.Model):
             self.save()
             count_obj.save()
 
-
     def complete_trans_with_wallet(self, user):
         """Complete the transaction with wallet currency; If the wallet doesn't have enough currency,
         return false"""#also, maybe the information about the foodtransaction must be parsed into json or sth for API usage...
@@ -98,9 +81,6 @@ class FoodTransaction(models.Model):
             return True
         else:
             return False
-
-    def complete_trans_with_payment(self):
-        pass
 
 
 class FoodCount(models.Model):

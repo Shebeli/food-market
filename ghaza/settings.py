@@ -153,6 +153,7 @@ SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/ghaza/'
 
 ZARINPAL_SANDBOX = True 
 
-ZARINPAL_REDIRECT_URL = 'http://localhost:8000/verify/'
+ZARINPAL_REDIRECT_URL = 'http://localhost:8000/payment/verify/'
 
+LOGIN_URL = "/ghaza/login/"
 #MERCHANT_ID

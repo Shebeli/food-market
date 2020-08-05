@@ -1,28 +1,36 @@
 from django.shortcuts import render, redirect, reverse
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.views.generic import ListView, FormView, DetailView, UpdateView
 from django.views.generic.base import TemplateResponseMixin, TemplateView, RedirectView
 from django.views.generic.detail import SingleObjectMixin, SingleObjectTemplateResponseMixin
 from django.views import View
 from django.contrib import messages
 from django.core.validators import validate_integer
+from django.core.exceptions import ObjectDoesNotExist
 from .models import TheFood, SiteWallet, FoodTransaction, FoodCount
 from .forms import SiteUserCreationForm, DepositForm, WithdrawForm
+from zarinpal.models import PaymentTransaction
 
 def get_trans(user):
         """Retrieves the latest food transaction.
         If theres no transaction availabe, then create one."""
         transactions = FoodTransaction.objects.filter(owner=user)
         for trans in transactions:
-            if trans.completed == False: #True, True, False, #True, True, True
+            if trans.completed == False:
                 return trans
             elif trans.completed == True:
                 continue
         trans = FoodTransaction.objects.create(owner=user)
         return trans
         
-
-       
+def get_payment(wallet):
+        """Get the associated payment object or create it.(For deposit incases only)"""
+        #pay, created= PaymentTransaction.objects.get_or_create(wallet=wallet, owner=wallet.owner)
+        try:                              
+            pay = PaymentTransaction.objects.get(wallet=wallet, owner=wallet.owner)
+        except ObjectDoesNotExist:
+            pay = PaymentTransaction.objects.create(wallet=wallet, owner=wallet.owner)
+        return pay
 
 class TheFoodListView(TemplateView):
 
@@ -44,12 +52,11 @@ class FoodListRedirectView(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         trans = get_trans(self.request.user)
         status = trans.complete_trans_with_wallet(self.request.user)
-        if status == True:
+        if status:
             messages.success(self.request,"Transaction completed successfully.")
             return super().get_redirect_url(*args, **kwargs)
-        else:
-            messages.error(self.request,"You do not have enough currency.")
-            return super().get_redirect_url(*args, **kwargs)
+        messages.error(self.request,"You do not have enough currency.")
+        return super().get_redirect_url(*args, **kwargs)
 
 
 
@@ -121,6 +128,22 @@ class WalletDepositView(FormView):
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
+
+    def post(self, request, *args, **kwargs):# for zarinpal
+        form = self.get_form()
+        if form.is_valid():
+            amount = int(request.POST.get('deposit'))
+            self.object = self.get_object()
+            pay = get_payment(self.object)
+            pay.amount = amount 
+            pay.save()
+            request.session['ok'] = True 
+            return redirect(reverse('zarinpal:send-request', kwargs={'pk': pay.pk}))
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        return HttpResponseRedirect(self.get_success_url())
 
 class WalletWithdrawView(FormView):
     model = SiteWallet

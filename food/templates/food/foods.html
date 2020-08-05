@@ -12,6 +12,7 @@
     {% endfor %}    
     total price:{{ transaction.total_price }}</h2>
     <a href="{% url 'foodwallet-transaction' %}">Complete foodtransaction via wallet</a>
+    <a href="{% url 'zarinpal:startpay' %}">Complete foodtransaction via direct payment</a>
 {% else %}
 <h1>NO wallet</h1>
 {% endif %}
