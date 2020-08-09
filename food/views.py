@@ -7,6 +7,7 @@ from django.views import View
 from django.contrib import messages
 from django.core.validators import validate_integer
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import TheFood, SiteWallet, FoodTransaction, FoodCount
 from .forms import SiteUserCreationForm, DepositForm, WithdrawForm
 from zarinpal.models import PaymentTransaction
@@ -93,7 +94,7 @@ class UserRegisterFormView(FormView):
         self.object = form.save()
         return super().form_valid(form)
 
-class WalletDetailView(DetailView):
+class WalletDetailView(LoginRequiredMixin ,DetailView):
     model = SiteWallet
     #queryset = SiteWallet.objects.filter(owner=request.use)
     context_object_name = 'sitewallet'

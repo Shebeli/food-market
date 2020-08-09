@@ -1,0 +1,13 @@
+{% extends 'food/base2.html' %}
+
+{% block content%}
+<div class="main">
+    <header id="heading">
+        <h1>Register and get 10% off on first order!</h1>
+    </header>
+    <a href="{% url 'register'%}">
+        <button class="btn btn-success btn-md" style="font-weight:700">Register</button>
+    </a>
+    <a id="login" href="{% url 'login'%}">Already have an account? click here!</a>
+</div>
+{% endblock %}

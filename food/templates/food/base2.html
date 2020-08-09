@@ -1,0 +1,60 @@
+{% load static %}
+{% load bootstrap4 %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    {% bootstrap_css %}
+    {% bootstrap_javascript jquery='full' %}
+    <link rel="stylesheet" href="{% static 'food/custom.css'%}" type="text/css"/>
+    <title>Food</title>
+  </head>
+  <body>
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">
+                <img src="{% static 'food/images/logo.jpg' %}" width=30 height=30> Ghaza
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav mr-4" href="{% url 'index'%}">Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav mr-4" href="{% url 'food-list'%}">Foods</a>  
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav mr-4" href="{% url 'wallet'%}">Wallet</a>  
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav mr-4" href="#">About</a>  
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %} 
+                    <li class="nav-item active">
+                        <p class="nav"> Welcome {{user}}</p>
+                    </li>
+                {% else %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'login'%}">Login</a>  
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'register'%}">Register</a>  
+                    </li>
+                </ul>
+                {% endif %}
+            </div>
+        </nav>
+        {% block content %}{% endblock %}
+        <footer class="pt-4 bg-dark text-white text-center text-small">
+            <p class="">&copy; 2020 Shebeli</p>
+                <a href="#">Github</a>
+        </footer>
+  </body>
+</html>

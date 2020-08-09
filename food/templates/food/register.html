@@ -4,7 +4,6 @@
 
 {% block content %}
 
-{{ user }}
 <form method='POST'>
     {% csrf_token %}
     {{ form.username|as_crispy_field}}
