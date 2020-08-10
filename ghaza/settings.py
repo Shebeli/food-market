@@ -190,16 +190,12 @@ else:
         pass
 
 if os.environ.get('GOOGLE_SECRET'):
-    SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get('GOOGLE_SECRET')
+    SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get('GOOGLE_SECRET')
 else:
     try:
         SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = secret.GOOGLE_SECRET
     except ImportError:
         pass
-    
-    301274212531-vktv037r7t42j1sdlvabaqp69vuuo3gm.apps.googleusercontent.com
-    301274212531-vktv037r7t42j1sdlvabaqp69vuuo3gm.apps.googleusercontent.com
-
 
 
 
