@@ -190,7 +190,7 @@ else:
         pass
 
 if os.environ.get('GOOGLE_SECRET'):
-    SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get('GOOGLE_KEY')
+    SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get('GOOGLE_SECRET')
 else:
     try:
         SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = secret.GOOGLE_SECRET
