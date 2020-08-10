@@ -15,7 +15,7 @@ from . import exceptions
 
 sandbox = getattr(settings, "ZARINPAL_SANDBOX", False)
 merchant = getattr(settings, "MERCHANT_ID", None)
-#callback_url = getattr(settings, "ZARINPAL_REDIRECT_URL", None)
+main_url = getattr(settings, "ZARINPAL_MAIN_URL", None)
 #callback_url = reverse('verify',kwargs={'pk':})
 
 #if not callback_url:
@@ -60,7 +60,7 @@ def send_request(request, pk):
         raise Http404
     del request.session['ok']
     description = f" جمع تراکنش {payobj.amount}"
-    callback_url = "http://127.0.0.1:8000" + reverse('zarinpal:verify',kwargs={'pk': pk})
+    callback_url = main_url + reverse('zarinpal:verify',kwargs={'pk': pk})
     result = client.service.PaymentRequest(merchant, amount, description, email, mobile, callback_url)
     if result.Status == 100:
         payobj.authority = str(result.Authority)

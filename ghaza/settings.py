@@ -14,9 +14,14 @@ import os
 
 
 try:
-    from .secret import *
+    from . import secret
 except ImportError:
-    os.environ.get('SECRET_KEY')
+    pass
+
+try:
+    SECRET_KEY = secret.SECRET_KEY
+except NameError:
+    SECRET_KEY = os.getenv('SECRET_KEY', None)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -157,12 +162,7 @@ SOCIAL_AUTH_LOGIN_URL ='/ghaza/'
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/ghaza/'
 
-ZARINPAL_SANDBOX = True 
-
-ZARINPAL_REDIRECT_URL = 'http://localhost:8000/payment/verify/'
-
 LOGIN_URL = "/ghaza/login/"
-
 
 import django_heroku
 django_heroku.settings(locals())
@@ -171,5 +171,16 @@ if os.environ.get('DEBUG') == 'TRUE':
     DEBUG = True
 elif os.environ.get('DEBUG') == 'FALSE':
     DEBUG = False
+
+if os.environ.get('ZARINPAL_MAIN_URL'):
+    ZARINPAL_MAIN_URL = os.environ.get('ZARINPAL_MAIN_URL')
+else:
+    ZARINPAL_MAIN_URL = 'http://localhost:8000'
+
+if os.environ.get('ZARINPAL_SANDBOX') == False:
+    ZARINPAL_SANDBOX = False
+else:
+    ZARINPAL_SANDBOX = True # Defaults to true
+
 
 
