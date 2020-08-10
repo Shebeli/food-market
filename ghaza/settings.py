@@ -155,8 +155,7 @@ SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 SOCIAL_AUTH_USER_MODE = 'food.SiteUser'
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '301274212531-rnj19gbqpmiuqa22fuhcugmdipkmag70.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'K1Uy6aCk2ji0k80bvTec0ofI'
+
 
 SOCIAL_AUTH_LOGIN_URL ='/ghaza/'
 
@@ -181,6 +180,25 @@ if os.environ.get('ZARINPAL_SANDBOX') == False:
     ZARINPAL_SANDBOX = False
 else:
     ZARINPAL_SANDBOX = True # Defaults to true
+
+if os.environ.get('GOOGLE_KEY'):
+    SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get('GOOGLE_KEY')
+else:
+    try:
+        SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = secret.GOOGLE_KEY
+    except ImportError:
+        pass
+
+if os.environ.get('GOOGLE_SECRET'):
+    SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get('GOOGLE_KEY')
+else:
+    try:
+        SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = secret.GOOGLE_SECRET
+    except ImportError:
+        pass
+    
+
+
 
 
 
