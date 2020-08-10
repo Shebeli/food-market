@@ -17,8 +17,8 @@ class PaymentTransaction(models.Model):
     status = models.CharField(choices=STATUS_CHOICES,default='P',max_length=10)
     date_created = models.DateTimeField(auto_now=True)
     date_modified = models.DateTimeField(auto_now_add=True)
-    authority = models.CharField(blank=True, max_length=10)
-    ref_id = models.CharField(blank=True, max_length=10)
+    authority = models.CharField(blank=True, max_length=50)
+    ref_id = models.CharField(blank=True, max_length=50)
     food_trans = models.OneToOneField(FoodTransaction,on_delete=models.DO_NOTHING,blank=True, null=True)
     wallet = models.ForeignKey(SiteWallet, on_delete=models.DO_NOTHING,blank=True, null=True)
 
