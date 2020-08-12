@@ -3,19 +3,15 @@
     font-weight: 300;
 }
 
-    
-.nav-item:hover{
-    color: blue;
-}
 
 .main {
 	text-align: center;
 	background-image: url("images/pizza.jpg");
-	background-size: cover;
-	width: 100%;
+    background-size: cover;
 	background-repeat: no-repeat;
-	background-position: center center;
-    padding-bottom: 300px;
+    background-position: center center;
+    height: 100vh;
+    
 }
 
 #heading{
@@ -50,12 +46,37 @@
     transition: 0.6s;
 }
 
-li.nav-item.active > a.nav.mr-4{
-    color: black;
+a.nav.mr-3 {
+    color: white;
     text-decoration: none;
+    transition: 0.4s;
 }
 
-
-li.nav-item.active > a.nav.mr-4:hover{
-    color: rgb(0, 110, 255);
+a.nav.mr-3:hover {
+    color: rgb(0,110,255);
+    transition: 0.4s;
 }
+a.nav {
+    color: white;
+    text-decoration: none;
+    transition: 0.4s;
+}
+
+a.nav:hover {
+    color: rgb(0,110,255);
+    text-decoration: none;
+    transition: 0.4s;
+}
+
+/* base3.html */
+
+
+.main2{
+    background-image: url("images/foods3.jpg");
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+

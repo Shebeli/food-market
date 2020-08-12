@@ -92,6 +92,7 @@ class UserRegisterFormView(FormView):
 
     def form_valid(self, form):
         self.object = form.save()
+        messages.success(request, "You've been registered successfully!")
         return super().form_valid(form)
 
 class WalletDetailView(LoginRequiredMixin ,DetailView):

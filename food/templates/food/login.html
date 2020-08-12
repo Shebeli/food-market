@@ -1,14 +1,19 @@
-{% load bootstrap4 %}
+{% extends 'food/base3.html' %}
 
+{% load crispy_forms_tags %}
+
+{% block content %}
 <form method="post" action="{% url 'login' %}" class="form">
         {% csrf_token %}
-        {% bootstrap_form form %}
-        {% buttons %}
+        {{ form|crispy }}
+        {{ buttons }}
             <button name="submit" class="btn btn-primary">Log in</button>
-        {% endbuttons %}
+        {{ endbuttons }}
     <a href="#">Forgot password?</a>
 
         <input type="hidden" name="next"
                value="{% url 'index' %}" />
+<a href="{% url "social:begin" "google-oauth2" %}" class="float-right">Google+</a>
 </form>
-<a href="{% url "social:begin" "google-oauth2" %}">Google+</a>
+
+{% endblock %}

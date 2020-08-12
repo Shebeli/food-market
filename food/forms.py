@@ -2,16 +2,20 @@ from django.contrib.auth.forms import UserCreationForm, forms
 from food.models import SiteUser 
 
 class SiteUserCreationForm(UserCreationForm):
-    
+    username = forms.CharField(max_length=150,help_text='یوزرنیمت')
     class Meta(UserCreationForm.Meta):
         model = SiteUser 
         fields = UserCreationForm.Meta.fields + ('username','email','phone_number','first_name','last_name')
-        #labels = {
-        #    'phone_number':'9********'
-        #}
+    
         widgets = {
             'phone_number': forms.TextInput()
         }
+        help_text = {
+            'username': 'یوزرت ',
+            'password1': 'اوووووو'
+        }
+        label={'username':'یوزرنیم',
+        'password1': 'اوووووو'}
 
 class DepositForm(forms.Form):
     deposit = forms.IntegerField(min_value=5000,max_value=10000000,
