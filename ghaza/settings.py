@@ -193,7 +193,7 @@ if os.environ.get('GOOGLE_KEY'):
 else:
     try:
         SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = secret.GOOGLE_KEY
-    except ImportError:
+    except NameError:
         pass
 
 if os.environ.get('GOOGLE_SECRET'):
@@ -201,7 +201,7 @@ if os.environ.get('GOOGLE_SECRET'):
 else:
     try:
         SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = secret.GOOGLE_SECRET
-    except ImportError:
+    except NameError:
         pass
 
 PROJECT_ROOT = os.path.join(os.path.abspath(__file__))
