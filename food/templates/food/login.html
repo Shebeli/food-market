@@ -1,5 +1,5 @@
 {% extends 'food/base3.html' %}
-
+{% load socialaccount %}
 {% load crispy_forms_tags %}
 
 {% block content %}
@@ -9,11 +9,11 @@
         {{ buttons }}
             <button name="submit" class="btn btn-primary">Log in</button>
         {{ endbuttons }}
-    <a href="#">Forgot password?</a>
+    <a href="{% url 'register' %}">Register</a>
 
         <input type="hidden" name="next"
                value="{% url 'index' %}" />
-<a href="{% url "social:begin" "google-oauth2" %}" class="float-right">Google+</a>
+<a href="{% provider_login_url 'google' %}" class="float-right">Google+</a>
 </form>
 
 {% endblock %}

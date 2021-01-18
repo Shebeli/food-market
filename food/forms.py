@@ -2,14 +2,11 @@ from django.contrib.auth.forms import UserCreationForm, forms
 from food.models import SiteUser 
 
 class SiteUserCreationForm(UserCreationForm):
-    username = forms.CharField(max_length=150,help_text='یوزرنیمت')
+    username = forms.CharField(max_length=150)
     class Meta(UserCreationForm.Meta):
         model = SiteUser 
-        fields = UserCreationForm.Meta.fields + ('username','email','phone_number','first_name','last_name')
+        fields = UserCreationForm.Meta.fields + ('username','email','first_name','last_name')
     
-        widgets = {
-            'phone_number': forms.TextInput()
-        }
         help_text = {
             'username': 'یوزرت ',
             'password1': 'اوووووو'

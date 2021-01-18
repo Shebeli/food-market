@@ -1,0 +1,37 @@
+{% extends 'food/base3.html' %}
+{% load static %}
+{% block content %}
+  {% if transaction.total_price %}
+
+  <h4>Wallet Balance: {{ user.sitewallet.balance }} $</h4>
+  <h4><a href="{% url 'foodwallet-transaction' %}">Complete foodtransaction via wallet</a></h4>
+  <h4><a href="{% url 'zarinpal:startpay' %}">Complete foodtransaction via direct payment</a></h4>
+  <h4>Selected menu:<h4>
+  {% endif %}
+  {% for food in food_count %}
+        <h5>{{forloop.counter}}) food:{{ food.food.name }} price:{{ food.food.price }} count: {{ food.count }}
+        <a href="{% url 'increase-item' food.food.pk %}">+</a>
+        <a href="{% url 'decrease-item' food.food.pk %}">-</a>
+        <a href="{% url 'remove-item' food.food.pk %}">Remove Item</a></h5>
+        </br>
+    {% endfor %}  
+  <div class="card-columns">
+    {% for food in food_list %}
+    <div class="card">
+    {% if food.image %}
+      <img class="card-img-top" src= '{{food.image.url}}' width="160" height="270" alt="Card image cap">
+    {% else %}
+        <img class="card-img-top" src= '{% static 'food/images/defaultfood.png' %}' width="160" height="270" alt="Card image cap">
+    {% endif %}
+      <div class="card-body">
+        <h5 class="card-title">{{ food.name }} - {{ food.price }} $</h5>
+        <h5></h5>
+        <p class="card-text">{{food.category}}</p>
+      </div>
+      <div class="card-footer">
+        <a href="{% url 'add-item' food.pk %}" class="btn btn-primary">Add food</a>
+      </div>
+    </div>
+    {% endfor %}
+    </div>
+{% endblock %}

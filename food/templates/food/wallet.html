@@ -1,2 +1,6 @@
-<h1>{{ sitewallet.owner }}: {{ sitewallet.balance }}$</h1>
-<p>MONEEEEEEEEEEEEEEEEEEEEEY</p>
+{% extends 'food/base3.html' %}
+{% block content %}
+<h1>Wallet's Balance: {{ sitewallet.balance }}$</h1>
+<h2><a href='{%url 'wallet-deposit'%}'>Click here to deposit</a></h2>
+
+{% endblock %}

@@ -53,6 +53,13 @@
                 {% endif %}
             </div>
         </nav>
+        {% if messages %}
+            <ul class="messages">
+            {% for message in messages %}
+                <h3><li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li></h3>
+            {% endfor %}
+            </ul>
+        {% endif %}
         {% block content %}{% endblock %}
         <footer class="pt-3 bg-dark text-white text-center text-small">
             <p class="">&copy; 2020 Shebeli</p>

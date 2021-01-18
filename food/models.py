@@ -9,9 +9,11 @@ class SiteUser(AbstractUser):
     last_name = models.CharField(max_length=30,blank=True,verbose_name='نام خانوادگی')
     phone_number = models.IntegerField(verbose_name='شماره تلفن',unique=True,
     error_messages={'unique':'این شماره قبلا ثبت شده است'},
-    blank=False,null=True,help_text='شماره در 10 رقم به صورت  ******9'
+    blank=True,null=True,help_text='شماره در 10 رقم به صورت  ******9'
     )
-    email = models.EmailField(verbose_name='ایمیل',blank=False)
+    email = models.EmailField(verbose_name='ایمیل',blank=True)
+
+    REQUIRED_FIELDS = []
 
 
 class TheFood(models.Model):
@@ -74,6 +76,8 @@ class FoodTransaction(models.Model):
         return false"""#also, maybe the information about the foodtransaction must be parsed into json or sth for API usage...
         wallet = SiteWallet.objects.get(owner=user)    
         cost = self.total_price
+        if self.total_price == 0:
+            return False
         if wallet.balance >= cost:
             wallet.withdraw(cost)
             self.completed = True

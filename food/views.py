@@ -33,7 +33,7 @@ def get_payment(wallet):
             pay = PaymentTransaction.objects.create(wallet=wallet, owner=wallet.owner)
         return pay
 
-class TheFoodListView(TemplateView):
+class TheFoodListView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -56,7 +56,7 @@ class FoodListRedirectView(RedirectView):
         if status:
             messages.success(self.request,"Transaction completed successfully.")
             return super().get_redirect_url(*args, **kwargs)
-        messages.error(self.request,"You do not have enough currency.")
+        messages.error(self.request,"You do not have enough currency or the transaction is invalid")
         return super().get_redirect_url(*args, **kwargs)
 
 
@@ -92,7 +92,7 @@ class UserRegisterFormView(FormView):
 
     def form_valid(self, form):
         self.object = form.save()
-        messages.success(request, "You've been registered successfully!")
+        messages.success(self.request, "You've been registered successfully!")
         return super().form_valid(form)
 
 class WalletDetailView(LoginRequiredMixin ,DetailView):
@@ -104,6 +104,7 @@ class WalletDetailView(LoginRequiredMixin ,DetailView):
         self.object = SiteWallet.objects.get(owner=request.user)
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
+        
 
 class WalletDepositView(FormView):
     model = SiteWallet
@@ -120,16 +121,6 @@ class WalletDepositView(FormView):
 
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        form = self.get_form()
-        if form.is_valid():
-            amount = int(request.POST.get('deposit'))
-            self.object = self.get_object()
-            self.object.deposit(amount)
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
 
     def post(self, request, *args, **kwargs):# for zarinpal
         form = self.get_form()

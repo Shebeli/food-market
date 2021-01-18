@@ -80,3 +80,12 @@ a.nav:hover {
     align-items: center;
 }
 
+nav.navbar {
+    z-index: 5;
+    background-color: blue;
+}
+
+footer.text-center {
+ z-index: 5;
+}
+

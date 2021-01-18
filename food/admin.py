@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import TheFood, SiteUser, SiteWallet, WalletTransactions, FoodTransaction
+from zarinpal.models import PaymentTransaction
 from django.contrib.auth.admin import UserAdmin
 
 admin.site.register(TheFood)

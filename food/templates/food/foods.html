@@ -3,7 +3,7 @@
     <h1>Hello, {{ user }}</h1>
     <h1> Wallet Balance {{ user.sitewallet.balance }} </h1>
     <h2> Food list --> </br>
-     {% for food in food_count %}
+    {% for food in food_count %}
         {{forloop.counter}}) food:{{ food.food.name }} price:{{ food.food.price }} count: {{ food.count }}
         <a href="{% url 'increase-item' food.food.pk %}">+</a>
         <a href="{% url 'decrease-item' food.food.pk %}">-</a>

@@ -1,5 +1,6 @@
 env/
 __pycache__/
-*.sqlite3
 secret.py
 status.txt
+staticfiles/
+db.sqlite3
